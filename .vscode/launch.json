@@ -8,7 +8,7 @@
             "program": "${workspaceFolder}/build/full_kernel.elf",
             "miDebuggerServerAddress": "localhost:1234",
             "miDebuggerPath": "/usr/bin/gdb",
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "MIMode": "gdb",
             "targetArchitecture": "x86",

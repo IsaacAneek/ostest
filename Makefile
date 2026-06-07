@@ -4,12 +4,16 @@ kernel.o : src/kernel.c
 	i386-elf-gcc -Isrc/include -ffreestanding -O0 -nostdlib -m32 -g -c "src/kernel.c" -o "build/kernel.o"
 kernel_entry.o : src/kernel_entry.asm
 	nasm "src/kernel_entry.asm" -f elf32 -o "build/kernel_entry.o"
+idt.o : src/drivers/interrupt/idt.asm
+	nasm "src/drivers/interrupt/idt.asm" -f elf32 -o "build/idt.o"
+interrupt.o : src/drivers/interrupt/interrupt.c
+	i386-elf-gcc -Isrc/include -ffreestanding -O0 -nostdlib -m32 -g -c "src/drivers/interrupt/interrupt.c" -o "build/interrupt.o"
 vga.o : src/drivers/video/vga.c
 	i386-elf-gcc -Isrc/include -ffreestanding -O0 -nostdlib -m32 -g -c "src/drivers/video/vga.c" -o "build/vga.o"
-full_kernel.elf : kernel.o kernel_entry.o vga.o
-	i386-elf-ld -o "build/full_kernel.elf" -T src/linker.ld "build/kernel_entry.o" "build/kernel.o" "build/vga.o"
-full_kernel.bin : kernel.o kernel_entry.o vga.o
-	i386-elf-ld -o "build/full_kernel.bin" -T src/linker.ld "build/kernel_entry.o" "build/kernel.o" "build/vga.o" --oformat binary
+full_kernel.elf : kernel.o kernel_entry.o vga.o interrupt.o idt.o
+	i386-elf-ld -o "build/full_kernel.elf" -T src/linker.ld "build/kernel_entry.o" "build/kernel.o" "build/vga.o" "build/idt.o" "build/interrupt.o"
+full_kernel.bin : kernel.o kernel_entry.o vga.o idt.o interrupt.o
+	i386-elf-ld -o "build/full_kernel.bin" -T src/linker.ld "build/kernel_entry.o" "build/kernel.o" "build/vga.o" "build/idt.o" "build/interrupt.o" --oformat binary
 OS.bin : boot.bin full_kernel.bin
 	cat "build/boot.bin" "build/full_kernel.bin" > "build/OS.bin"
 extend : OS.bin

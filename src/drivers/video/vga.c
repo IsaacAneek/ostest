@@ -8,8 +8,8 @@ void puts_vga(const char *string)
 {
     for (int x = 0; string[x] != '\0'; x++)
     {
-        video_mem[x * 2] = string[x];
-        video_mem[x * 2 + 1] = attr_byte;
+        video_mem[cursor * 2] = string[x];
+        video_mem[cursor * 2 + 1] = attr_byte;
         cursor++;
     }
 }
@@ -18,8 +18,8 @@ void puts_vga_color(const char *string, const unsigned char attrbyte)
 {
     for (int x = 0; string[x] != '\0'; x++)
     {
-        video_mem[x * 2] = string[x];
-        video_mem[x * 2 + 1] = attrbyte;
+        video_mem[cursor * 2] = string[x];
+        video_mem[cursor * 2 + 1] = attrbyte;
         cursor++;
     }
 }

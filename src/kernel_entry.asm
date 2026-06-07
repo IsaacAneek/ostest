@@ -1,7 +1,7 @@
 [bits 32]
 
 global _start
-[extern main]
+extern main
 
 _start:
     call main

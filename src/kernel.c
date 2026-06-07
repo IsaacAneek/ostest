@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include "include/drivers/video/vga.h"
+#include "include/drivers/interrupt/interrupt.h"
 
 void kprintf(char *format, ...)
 {
@@ -55,6 +56,11 @@ void kprintf(char *format, ...)
 
 void main()
 {
+    idt_init();
+    asm volatile("int $0x30");
+    // kernel keeps restarting if called idt_init()
+    // check it
+    putc_vga('b');
     kprintf("Hello world for %c %d times from myOS", 'e', 123);
-    return;
+    while(1);
 }
