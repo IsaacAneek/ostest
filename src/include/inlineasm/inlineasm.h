@@ -1,4 +1,5 @@
-#include "inlineasm.h"
+#ifndef INLINEASM_H_
+#define INLINEASM_H_
 #include <stdint.h>
 
 static inline void outb(uint16_t port, uint8_t val)
@@ -9,7 +10,6 @@ static inline void outb(uint16_t port, uint8_t val)
      * The  outb  %al, %dx  encoding is the only option for all other cases.
      * %1 expands to %dx because  port  is a uint16_t.  %w1 could be used if we had the port number a wider C type */
 }
-
 static inline uint8_t inb(uint16_t port)
 {
     uint8_t ret;
@@ -19,7 +19,6 @@ static inline uint8_t inb(uint16_t port)
                    : "memory");
     return ret;
 }
-
 static inline void lidt(void* base, uint16_t size)
 {
     // This function works in 32 and 64bit mode
@@ -30,3 +29,9 @@ static inline void lidt(void* base, uint16_t size)
 
     asm ( "lidt %0" : : "m"(IDTR) );  // let the compiler choose an addressing mode
 }
+static inline void io_wait(void)
+{
+    outb(0x80, 0);
+}
+
+#endif // INLINEASM_H_

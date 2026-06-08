@@ -25,7 +25,7 @@ struct idt_ptr
 struct idt_entry idt[256];
 struct idt_ptr idtp;
 
-/* This exists in 'start.asm', and is used to load our IDT */
+/* This exists in 'idt.asm', and is used to load our IDT */
 extern void idt_load();
 extern void isr0();
 
