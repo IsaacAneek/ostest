@@ -54,8 +54,10 @@ void PIC_remap(int offset1, int offset2)
 	outb(PIC2_DATA, ICW4_8086);
 	io_wait();
 
-	// Unmask both PICs.
-	outb(PIC1_DATA, 0xFD);
+	// disable PIC2
+	// enable only the IRQ1 (which is connected to PS/2 keyboard controller)
+	// for testing purpose
+	outb(PIC1_DATA, 0b11111101);
 	outb(PIC2_DATA, 0xFF);
 }
 

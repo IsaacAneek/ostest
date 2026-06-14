@@ -40,13 +40,13 @@ cd gcc-build
 echo Configure: . . . . . . .
 ../gcc-12.2.0/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --disable-libssp --enable-language=c,c++ --without-headers
 echo MAKE ALL-GCC:
-make all-gcc
+sudo make all-gcc
 echo MAKE ALL-TARGET-LIBGCC:
-make all-target-libgcc
+sudo make all-target-libgcc
 echo MAKE INSTALL-GCC:
-make install-gcc
+sudo make install-gcc
 echo MAKE INSTALL-TARGET-LIBGCC:
-make install-target-libgcc
+sudo make install-target-libgcc
 echo HERE U GO MAYBE:
 ls /usr/local/i386elfgcc/bin
 export PATH="$PATH:/usr/local/i386elfgcc/bin"
