@@ -13,14 +13,13 @@ extern int cursor;
 void main()
 {
     idt_init();
-    keyboard_init();
     PIC_init();
+    keyboard_init();
     // putc_vga('b');
     //asm volatile("int $0x30");
     kprintf("Hello world for %c %d times from myOS", 'e', 123);
     asm volatile("sti");
 
-    // test keyboard
     while (1)
     {
 
