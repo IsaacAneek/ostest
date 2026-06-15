@@ -7,7 +7,6 @@
 #include "include/drivers/stdio/stdio.h"
 
 extern int cursor;
-extern int ScanCode;
 
 
 
@@ -24,10 +23,6 @@ void main()
     // test keyboard
     while (1)
     {
-        if (ScanCode)
-        {
-            putc_vga('D');
-            ScanCode = 0;
-        }
+
     };
 }

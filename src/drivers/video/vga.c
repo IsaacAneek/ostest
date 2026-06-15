@@ -4,6 +4,12 @@ int cursor = 0;
 volatile unsigned char *video_mem = (volatile unsigned char *)0xb8000;
 unsigned char attr_byte = 0x0F;
 
+void backspace() {
+    cursor--;
+    video_mem[cursor * 2] = ' ';
+    video_mem[cursor * 2 + 1] = attr_byte;
+}
+
 void puts_vga(const char *string)
 {
     for (int x = 0; string[x] != '\0'; x++)
