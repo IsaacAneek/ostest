@@ -7,6 +7,7 @@
 #define BSY 7
 #define DDRY 6
 #define DRQ 4
+#define PRIMARY_ATA_DRIVE_HEAD 0x1F6
 #define PRIMARY_ATA_SECTOR_NUMBER 0x1F3
 #define PRIMARY_ATA_CYLINDER_LOW 0x1F4
 #define PRIMARY_ATA_CYLINDER_HIGH 0x1F5
@@ -19,18 +20,19 @@ void select_master_ATA_device()
 {
     // Select Master device, bit 6 set for LBA mode
     // 0xA0 for master device
-    outb(0x1F6, 0xA0);
+    outb(PRIMARY_ATA_DRIVE_HEAD, 0xE0);
 }
 
 void wait_for_ATA_device()
 {
     uint8_t status = inb(PRIMARY_ATA_COMMAND_AND_STATUS);
-    // wait for BSY and DRQ bit to set
-    while (!(status & (1 << BSY)))
+    // wait for BSY bit to clear and DRQ bit to set
+    while ((status & (1 << BSY)))
     {
         status = inb(PRIMARY_ATA_COMMAND_AND_STATUS);
     }
-    while (!(status & (1 << DRQ)))
+    
+    while (!(status & (1 << DDRY)))
     {
         status = inb(PRIMARY_ATA_COMMAND_AND_STATUS);
     }
@@ -41,7 +43,8 @@ void wait_for_ATA_device()
     // }
 }
 
-read_sectors_LBA(uint32_t LBA, uint8_t sector_count, uint16_t *buffer)
+
+void read_sectors_LBA(uint32_t LBA, uint8_t sector_count, uint16_t *buffer)
 {
     uint8_t lba_low_byte = LBA & 0x0FF;
     uint8_t lba_mid_byte = (LBA >> 8) & 0x0FF;
@@ -49,6 +52,9 @@ read_sectors_LBA(uint32_t LBA, uint8_t sector_count, uint16_t *buffer)
     outb(PRIMARY_ATA_SECTOR_NUMBER, lba_low_byte);
     outb(PRIMARY_ATA_CYLINDER_LOW, lba_mid_byte);
     outb(PRIMARY_ATA_CYLINDER_HIGH, lba_high_byte);
+
+    // select LBA mode and append low 4 bit of remaining 8 bits of LBA
+    outb(PRIMARY_ATA_DRIVE_HEAD, (0xE0 | (LBA >> 24) & 0x0F));
 
     // set sector count
     outb(PRIMARY_ATA_SECTOR_COUNT, sector_count);
