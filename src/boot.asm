@@ -20,10 +20,10 @@ int 0x13
 
 jc DISK_ERROR
 
-; text mode
+; text 80x25 (character matrix) 16-bit color mode
 ; clears screen
-mov ah, 0x0
-mov al, 0x3
+mov ah, 0x0     ; selects 'Set Video Mode' function for BIOS interrupt 0x10
+mov al, 0x3     ; selects the desired video mode
 int 0x10
 
 cli

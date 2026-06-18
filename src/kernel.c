@@ -19,15 +19,20 @@ void main()
     init_ATA_HDD();
     // putc_vga('b');
     //asm volatile("int $0x30");
-    //kprintf("Hello world for %c %d times from myOS", 'e', 123);
+    clearscreen();
+    kprintf("Hello world for %c %d times from myOS\n", 'e', 123);
+    // int c = cursor;
+    // cursor = 0;
+    // kprintf("%d",c);
+    
     asm volatile("sti");
 
     uint16_t buffer[256] = {'a'};
-    read_sectors_LBA(19, 1, buffer);
-    for(int i = 0; i < 256; i++) {
-        putc_vga(buffer[i]);
-        putc_vga(buffer[i] >> 8);
-    }
+    // read_sectors_LBA(19, 1, buffer);
+    // for(int i = 0; i < 256; i++) {
+    //     putc_vga(buffer[i]);
+    //     putc_vga(buffer[i] >> 8);
+    // }
 
     while (1)
     {
